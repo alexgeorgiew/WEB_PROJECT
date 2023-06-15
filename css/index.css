@@ -1,0 +1,21 @@
+.hline{
+	position: relative;
+	margin-top: 50px;
+}
+
+.btn{
+	float: right;
+	position: relative;
+	font-size: 20px;
+	border-radius: 5px;
+}
+
+.table{
+	display: block;
+	margin-top: 200px;
+}
+
+.table_head{
+	width: 200px; 
+	text-align: left;
+}

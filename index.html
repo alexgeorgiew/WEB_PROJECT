@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/index.css">
+		<title>Cloud Services Analyzator</title>
+	</head>
+	
+	<body>
+		<main>
+		     <form class="" action="php/index.php" method="post">
+			<button type="submit" class="btn" name="wizard_btn">Find service</button>
+			<button type="submit" class="btn" name="export_btn">Export</button>
+		     </form>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="table_head">Name</th>
+						<th class="table_head">API Name</th>
+						<th class="table_head">Memory</th>
+						<th class="table_head">vCPUs</th>
+						<th class="table_head">Storage</th>
+						<th class="table_head">I/O</th>
+						<th class="table_head">Node On Demand cost</th>
+						<th class="table_head">Node Reserved cost</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a>dense compute</a></td>
+						<td><a>dc</a></td>
+						<td><a>15gib</a></td>
+						<td><a>2 vcpus</a></td>
+						<td><a>1tb ssd</a></td>
+						<td><a>0.5gb/s</a></td>
+						<td><a>$1.2 day</a></td>
+						<td><a>$1 day</a></td>
+					</tr>
+					<tr>
+						<td><a>managed storage</a></td>
+						<td><a>ra3</a></td>
+						<td><a>10gib</a></td>
+						<td><a>2vcpu</a></td>
+						<td><a>0.1tb ssd</a></td>
+						<td><a>0.4gb/s</a></td>
+						<td><a>$99 day</a></td>
+						<td><a>$80 day</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</main>
+	</body>
+</html>
