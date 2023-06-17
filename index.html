@@ -4,13 +4,46 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="css/index.css">
 		<title>Cloud Services Analyzator</title>
+		<script>
+			function wizard_func(){
+				var data = new FormData();
+				data.append("wizard",document.getElementById("wizard").name);
+				
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST","./php/index.php");
+				xhr.onload = function(){
+					console.log(this.response);
+				};
+				
+				xhr.send(data);
+				
+				return false;
+			}
+			
+			function export_func(){
+				var data = new FormData();
+				data.append("export",document.getElementById("export").name);
+				
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST","./php/index.php");
+				xhr.onload = function(){
+					console.log(this.response);
+				};
+				
+				xhr.send(data);
+				
+				return false;
+			}
+		</script>
 	</head>
 	
 	<body>
 		<main>
-		     <form class="" action="php/index.php" method="post">
-			<button type="submit" class="btn" name="wizard_btn">Find service</button>
-			<button type="submit" class="btn" name="export_btn">Export</button>
+		     <form onsubmit="return wizard_func()">
+			<button type="submit" class="btn" id="wizard" name="wizard_btn" >Find service</button>
+		     </form>
+		     <form onsubmit="return export_func()">
+			<button type="submit" class="btn" id="export" name="export_btn">Export</button>
 		     </form>
 			
 			<table class="table">
