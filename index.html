@@ -6,6 +6,7 @@
 		<title>Cloud Services Analyzator</title>
 		<script>
 			function wizard_func(){
+				document.getElementById("wizard_form").style.visibility="visible";
 				var data = new FormData();
 				data.append("wizard",document.getElementById("wizard").name);
 				
@@ -33,6 +34,10 @@
 				xhr.send(data);
 				
 				return false;
+			}
+			function find_service()
+			{
+			
 			}
 		</script>
 	</head>
@@ -83,6 +88,25 @@
 					</tr>
 				</tbody>
 			</table>
+			
+			<form class="form" id="wizard_form" onsubmit="return find_service()">
+				<select class="drop_down" id="regions_names">
+						<option value="London">Europe (London)</option> 
+						<option value="Paris">Europe (Paris)</option> 
+						<option value="Ireland">Europe (Ireland)</option> 
+						<option value="Tokyo">Asia-Pacific (Tokyo)</option> 
+				</select>
+				</br>
+				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day">
+				</br>
+				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day">
+				</br>
+				<input type="number" class="input_wizard" id="min_memory" placeholder="Min Gib">
+				</br>
+				<input type="number" class="input_wizard" id="max_memory" placeholder="Max Gib">
+				</br>
+				<button type="submit" class="wizard_form_btn" id="wizard_find" name="Find">Find</button>
+			</form>
 		</main>
 	</body>
 </html>

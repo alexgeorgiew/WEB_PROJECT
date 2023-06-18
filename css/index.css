@@ -19,3 +19,21 @@
 	width: 200px; 
 	text-align: left;
 }
+.form {
+	visibility: hidden;
+	background-color: coral;
+	overflow: auto;
+	position: relative;
+}
+.drop_down{
+	position: absolute;
+        left: 50%;
+}
+.input_wizard{
+	position: absolute;
+        left: 50%;
+}
+.wizard_form_btn{
+	position: absolute;
+        left: 50%;
+}
