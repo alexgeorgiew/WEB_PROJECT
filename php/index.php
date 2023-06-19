@@ -49,10 +49,68 @@
 			    fwrite($myfile, $results);
 			    fclose($myfile);
         }
+        function create_database(){
+        	$servername = "localhost";
+		$username = "root";
+		$password = "";
+
+		// Create connection
+		$conn = new mysqli($servername, $username, $password);
+		// Check connection
+		if ($conn->connect_error) {
+		  die("Connection failed: " . $conn->connect_error);
+		}
+
+		// Create database
+		$sql = "CREATE DATABASE myDB";
+		if ($conn->query($sql) === TRUE) {
+		  echo "Database created successfully";
+		} else {
+		  echo "Error creating database: " . $conn->error;
+		}
+		
+		
+        }
+        function create_table(){
+        	$servername = "localhost";
+		$username = "root";
+		$password = "";
+		$dbname = "myDB";
+
+		// Create connection
+		$conn = new mysqli($servername, $username, $password, $dbname);
+		// Check connection
+		if ($conn->connect_error) {
+		  die("Connection failed: " . $conn->connect_error);
+		}
+
+		// sql to create table
+		$sql = "CREATE TABLE Services (
+		id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		name VARCHAR(50) NOT NULL,
+		api_name VARCHAR(50) NOT NULL,
+		memory INT(6) UNSIGNED NOT NULL,
+		vcpus INT(6) UNSIGNED NOT NULL,
+		storage DOUBLE PRECISION(5,1) NOT NULL,
+		io DOUBLE PRECISION(5,1) NOT NULL,
+		node_on_demand_cost DOUBLE PRECISION(5,1) NOT NULL,
+		node_reserved_cost DOUBLE PRECISION(5,1) NOT NULL
+		)";
+
+		if ($conn->query($sql) === TRUE) {
+		  echo "Table Services created successfully";
+		} else {
+		  echo "Error creating table: " . $conn->error;
+		}
+
+		$conn->close();
+        }
         
         if($_POST['wizard']=="wizard_btn")
         {
         	wizard();
+        	create_database();
+        	create_table();
         }
         
         if($_POST['export']=="export_btn")
