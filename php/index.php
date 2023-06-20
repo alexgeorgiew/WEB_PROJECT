@@ -1,9 +1,11 @@
 <?php
         function wizard() {
             			echo "This is WIZARD BTN that is selected";
+            			echo "\n";
         }
         function export() {
 			    echo "This is Export BTN that is selected";
+			    echo "\n";
 			    
 			$htmlContent = file_get_contents("http://localhost/Project/index.html");
 				
@@ -65,13 +67,15 @@
 		$sql = "CREATE DATABASE myDB";
 		if ($conn->query($sql) === TRUE) {
 		  echo "Database created successfully";
+		  echo "\n";
 		} else {
 		  echo "Error creating database: " . $conn->error;
+		  echo "\n";
 		}
 		
 		
         }
-        function create_table(){
+        function create_database_table(){
         	$servername = "localhost";
 		$username = "root";
 		$password = "";
@@ -94,25 +98,84 @@
 		storage DOUBLE PRECISION(5,1) NOT NULL,
 		io DOUBLE PRECISION(5,1) NOT NULL,
 		node_on_demand_cost DOUBLE PRECISION(5,1) NOT NULL,
-		node_reserved_cost DOUBLE PRECISION(5,1) NOT NULL
+		node_reserved_cost DOUBLE PRECISION(5,1) NOT NULL,
+		region VARCHAR(50) NOT NULL
 		)";
 
 		if ($conn->query($sql) === TRUE) {
 		  echo "Table Services created successfully";
+		  echo "\n";
 		} else {
 		  echo "Error creating table: " . $conn->error;
+		  echo "\n";
 		}
 
 		$conn->close();
+        }
+        function get_data_from_database($min_price_per_day, $max_price_per_day, $min_memory,$max_memory, $regions_names){
+        		$servername = "localhost";
+			$username = "root";
+			$password = "";
+			$dbname = "myDB";
+
+			// Create connection
+			$conn = new mysqli($servername, $username, $password, $dbname);
+			// Check connection
+			if ($conn->connect_error) {
+			  die("Connection failed: " . $conn->connect_error);
+			}
+
+			$query = "SELECT * FROM Services WHERE node_on_demand_cost > '{$min_price_per_day}' AND node_on_demand_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}' ";
+			
+			$result = $conn->query($query);
+
+			if ($result->num_rows > 0) {
+			  // output data of each row
+			  while($row = $result->fetch_assoc()) {
+			  	$row_data= $row["name"] . " " . $row["api_name"] . " " . $row["memory"] . " " . $row["vcpus"] . " " . $row["storage"] . " " . $row["io"] . " " . $row["node_on_demand_cost"] . " " . $row["node_reserved_cost"];
+			    echo $row_data;
+			    echo "\n";
+			  }
+			}
+			else {
+			  echo "0 results";
+			  echo "\n";
+			}
+			
+			
+			$conn->close();
+        		
+        		
+        		
+        		/*$htmlContent = file_get_contents("http://localhost/Project/index.html");
+			$DOM = new DOMDocument();
+			$DOM->loadHTML($htmlContent);
+			
+			
+		        $para = $DOM->createElement("p");
+                        $node = $DOM->createTextNode("This is new.");
+                        $para->appendChild($node);
+                        $element = $DOM->getElementById("main");
+                        $element->appendChild($para);*/
+
         }
         
         if($_POST['wizard']=="wizard_btn")
         {
         	wizard();
         	create_database();
-        	create_table();
+        	create_database_table();
+        	get_data_from_database($_POST['min_price_per_day'],$_POST['max_price_per_day'],$_POST['min_memory'],$_POST['max_memory'],$_POST['regions_names']);
+        	echo $_POST['min_price_per_day'];
+        	echo "\n";
+        	echo $_POST['max_price_per_day'];
+        	echo "\n";
+        	echo $_POST['min_memory'];
+        	echo "\n";
+        	echo $_POST['max_memory'];
+        	echo "\n";
+        	echo $_POST['regions_names'];
         }
-        
         if($_POST['export']=="export_btn")
         {
         	export();

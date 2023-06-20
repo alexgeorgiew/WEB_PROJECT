@@ -5,19 +5,15 @@
 		<link rel="stylesheet" href="css/index.css">
 		<title>Cloud Services Analyzator</title>
 		<script>
+		
+			function delete_html_table_content(){
+				while(document.getElementById("myTable").rows.length > 1){
+					document.getElementById("myTable").deleteRow(1);
+				}
+			}
+			
 			function wizard_func(){
 				document.getElementById("wizard_form").style.visibility="visible";
-				var data = new FormData();
-				data.append("wizard",document.getElementById("wizard").name);
-				
-				var xhr = new XMLHttpRequest();
-				xhr.open("POST","./php/index.php");
-				xhr.onload = function(){
-					console.log(this.response);
-				};
-				
-				xhr.send(data);
-				
 				return false;
 			}
 			
@@ -35,15 +31,38 @@
 				
 				return false;
 			}
-			function find_service()
-			{
 			
+			function find_service(){
+				delete_html_table_content();
+				
+				var data = new FormData();
+				data.append("wizard",document.getElementById("wizard").name);
+				data.append("min_price_per_day",document.getElementById("min_price_per_day").value);
+				data.append("max_price_per_day",document.getElementById("max_price_per_day").value);
+				data.append("min_memory",document.getElementById("min_memory").value);
+				data.append("max_memory",document.getElementById("max_memory").value);
+				data.append("regions_names",document.getElementById("regions_names").value);
+				
+				
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST","./php/index.php");
+				xhr.onload = function(){
+					//console.log(this.response);
+					console.log(xhr.responseText);
+				};
+				
+				xhr.send(data);
+				
+		
+				
+				
+				return false;
 			}
 		</script>
 	</head>
 	
 	<body>
-		<main>
+		<main id="main">
 		     <form onsubmit="return wizard_func()">
 			<button type="submit" class="btn" id="wizard" name="wizard_btn" >Find service</button>
 		     </form>
@@ -51,7 +70,7 @@
 			<button type="submit" class="btn" id="export" name="export_btn">Export</button>
 		     </form>
 			
-			<table class="table">
+			<table class="table" id="myTable">
 				<thead>
 					<tr>
 						<th class="table_head">Name</th>
@@ -95,16 +114,16 @@
 						<option value="Paris">Europe (Paris)</option> 
 						<option value="Ireland">Europe (Ireland)</option> 
 						<option value="Tokyo">Asia-Pacific (Tokyo)</option> 
-				</select>
-				</br>
-				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day">
-				</br>
-				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day">
-				</br>
-				<input type="number" class="input_wizard" id="min_memory" placeholder="Min Gib">
-				</br>
-				<input type="number" class="input_wizard" id="max_memory" placeholder="Max Gib">
-				</br>
+				</select></br>
+				
+				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day"></br>
+				
+				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day"></br>
+				
+				<input type="number" class="input_wizard" id="min_memory" placeholder="Min Gib"></br>
+				
+				<input type="number" class="input_wizard" id="max_memory" placeholder="Max Gib"></br>
+				
 				<button type="submit" class="wizard_form_btn" id="wizard_find" name="Find">Find</button>
 			</form>
 		</main>
