@@ -132,7 +132,7 @@
 			if ($result->num_rows > 0) {
 			  // output data of each row
 			  while($row = $result->fetch_assoc()) {
-			  	$row_data= $row["name"] . " " . $row["api_name"] . " " . $row["memory"] . " " . $row["vcpus"] . " " . $row["storage"] . " " . $row["io"] . " " . $row["node_on_demand_cost"] . " " . $row["node_reserved_cost"];
+			  	$row_data= $row["name"] . "\n" . $row["api_name"] . "\n" . $row["memory"] . "\n" . $row["vcpus"] . "\n" . $row["storage"] . "\n" . $row["io"] . "\n" . $row["node_on_demand_cost"] . "\n" . $row["node_reserved_cost"];
 			    echo $row_data;
 			    echo "\n";
 			  }
@@ -162,11 +162,11 @@
         
         if($_POST['wizard']=="wizard_btn")
         {
-        	wizard();
-        	create_database();
-        	create_database_table();
+        	//wizard();
+        	//create_database();
+        	//create_database_table();
         	get_data_from_database($_POST['min_price_per_day'],$_POST['max_price_per_day'],$_POST['min_memory'],$_POST['max_memory'],$_POST['regions_names']);
-        	echo $_POST['min_price_per_day'];
+        	/*echo $_POST['min_price_per_day'];
         	echo "\n";
         	echo $_POST['max_price_per_day'];
         	echo "\n";
@@ -174,9 +174,9 @@
         	echo "\n";
         	echo $_POST['max_memory'];
         	echo "\n";
-        	echo $_POST['regions_names'];
+        	echo $_POST['regions_names'];*/
         }
-        if($_POST['export']=="export_btn")
+        else if($_POST['export']=="export_btn")
         {
         	export();
         }
