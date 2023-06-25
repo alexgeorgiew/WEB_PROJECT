@@ -93,12 +93,12 @@
 		id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(50) NOT NULL,
 		api_name VARCHAR(50) NOT NULL,
-		memory INT(6) UNSIGNED NOT NULL,
-		vcpus INT(6) UNSIGNED NOT NULL,
-		storage DOUBLE PRECISION(5,1) NOT NULL,
-		io DOUBLE PRECISION(5,1) NOT NULL,
-		node_on_demand_cost DOUBLE PRECISION(5,1) NOT NULL,
-		node_reserved_cost DOUBLE PRECISION(5,1) NOT NULL,
+		memory VARCHAR(50) NOT NULL,
+		vcpus VARCHAR(50) NOT NULL,
+		storage VARCHAR(50) NOT NULL,
+		VARCHAR(50) DOUBLE PRECISION(5,1) NOT NULL,
+		node_on_demand_cost VARCHAR(50) NOT NULL,
+		node_reserved_cost VARCHAR(50) NOT NULL,
 		region VARCHAR(50) NOT NULL
 		)";
 
@@ -125,7 +125,27 @@
 			  die("Connection failed: " . $conn->connect_error);
 			}
 
-			$query = "SELECT * FROM Services WHERE node_on_demand_cost > '{$min_price_per_day}' AND node_on_demand_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}' ";
+			$file = fopen('AmazonEC2InstanceComparison.csv', 'r');
+
+            while (($data = fgetcsv($file)) !== false) {
+
+            				$values = implode("','", $data);
+            				$sql = "INSERT INTO Services (id, name, api_name,memory, vcpus, storage, io, node_on_demand_cost, node_reserved_cost, region) VALUES ('" . $values . "')";
+
+            				if ($conn->query($sql) === true) {
+//             					echo "Data inserted successfully";
+            				} else {
+            					echo "Error inserting data: " . $conn->error;
+            				}
+            				if ($conn->query($sql) === false) {
+                            //             					echo "Data inserted successfully";
+//                                         				} else {
+                              echo "Error inserting data: " . $conn->error;
+                            }
+            }
+
+			$query = "SELECT * FROM Services WHERE memory > '{$min_memory}'";
+// 			-- 			 node_on_demand_cost > '{$min_price_per_day}' AND node_on_demand_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}' ";
 			
 			$result = $conn->query($query);
 
@@ -159,12 +179,13 @@
                         $element->appendChild($para);*/
 
         }
+//         }
         
         if($_POST['wizard']=="wizard_btn")
         {
         	//wizard();
-        	//create_database();
-        	//create_database_table();
+//         	create_database();
+//         	create_database_table();
         	get_data_from_database($_POST['min_price_per_day'],$_POST['max_price_per_day'],$_POST['min_memory'],$_POST['max_memory'],$_POST['regions_names']);
         	/*echo $_POST['min_price_per_day'];
         	echo "\n";
