@@ -96,7 +96,7 @@
 		memory VARCHAR(50) NOT NULL,
 		vcpus VARCHAR(50) NOT NULL,
 		storage VARCHAR(50) NOT NULL,
-		VARCHAR(50) DOUBLE PRECISION(5,1) NOT NULL,
+		io VARCHAR(50) NOT NULL,
 		node_on_demand_cost VARCHAR(50) NOT NULL,
 		node_reserved_cost VARCHAR(50) NOT NULL,
 		region VARCHAR(50) NOT NULL
@@ -130,7 +130,7 @@
             while (($data = fgetcsv($file)) !== false) {
 
             				$values = implode("','", $data);
-            				$sql = "INSERT INTO Services (id, name, api_name,memory, vcpus, storage, io, node_on_demand_cost, node_reserved_cost, region) VALUES ('" . $values . "')";
+            				$sql = "INSERT INTO Services (name, api_name,memory, vcpus, storage, io, node_on_demand_cost, node_reserved_cost, region) VALUES ('" . $values . "')";
 
             				if ($conn->query($sql) === true) {
 //             					echo "Data inserted successfully";

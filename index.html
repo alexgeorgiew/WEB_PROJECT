@@ -51,36 +51,36 @@
 					
 					
 				     var result = xhr.responseText;
-				     // var lines=result.split('\n');
-				     // let table = document.getElementById("myTable");
-				     //
-   				  //    for(let i=0; i<(lines.length-1)/8 ;i++){
-   				  //
-				     //  // Create a row using the inserRow() method and
-				     //  // specify the index where you want to add the row
-				     //  let row = table.insertRow(-1); // We are adding at the end
-					 //
-				     //  // Create table cells
-				     //  let c1 = row.insertCell(0);
-				     //  let c2 = row.insertCell(1);
-				     //  let c3 = row.insertCell(2);
-				     //  let c4 = row.insertCell(3);
-				     //  let c5 = row.insertCell(4);
-				     //  let c6 = row.insertCell(5);
-				     //  let c7 = row.insertCell(6);
-				     //  let c8 = row.insertCell(7);
-					 //
-				     //  // Add data to c1 and c2
-				     //  c1.innerText = lines[i*8 + 0];
-				     //  c2.innerText = lines[i*8 + 1];
-				     //  c3.innerText = `${lines[i*8 + 2]}gib`;
-				     //  c4.innerText = `${lines[i*8 + 3]} vcpus`;
-				     //  c5.innerText = `${lines[i*8 + 4]}tb`;
-				     //  c6.innerText = `${lines[i*8 + 5]}gb/s`;
-				     //  c7.innerText = `$${lines[i*8 + 6]} day`;
-				     //  c8.innerText = `$${lines[i*8 + 7]} day`;
-				     //  }
-					console.log(result);
+				     var lines=result.split('\n');
+				     let table = document.getElementById("myTable");
+
+   				     for(let i=0; i<(lines.length-1)/8 ;i++){
+
+				      // Create a row using the inserRow() method and
+				      // specify the index where you want to add the row
+				      let row = table.insertRow(-1); // We are adding at the end
+
+				      // Create table cells
+				      let c1 = row.insertCell(0);
+				      let c2 = row.insertCell(1);
+				      let c3 = row.insertCell(2);
+				      let c4 = row.insertCell(3);
+				      let c5 = row.insertCell(4);
+				      let c6 = row.insertCell(5);
+				      let c7 = row.insertCell(6);
+				      let c8 = row.insertCell(7);
+
+				      // Add data to c1 and c2
+				      c1.innerText = lines[i*8 + 0];
+				      c2.innerText = lines[i*8 + 1];
+				      c3.innerText = lines[i*8 + 2];
+				      c4.innerText = lines[i*8 + 3];
+				      c5.innerText = lines[i*8 + 4];
+				      c6.innerText = lines[i*8 + 5];
+				      c7.innerText = lines[i*8 + 6];
+				      c8.innerText = lines[i*8 + 7];
+				      }
+					// console.log(result);
 			      }
 				
 				xhr.send(data);
