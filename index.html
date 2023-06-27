@@ -19,8 +19,26 @@
 			}
 			
 			function export_func(){
-				var data = new FormData();
-				data.append("export",document.getElementById("export").name);
+			
+			var table = document.getElementById("myTable");
+			let $text="";
+			for (var i = 1, row; row = table.rows[i]; i++) {
+			   for (var j = 0, col; col = row.cells[j]; j++) {
+			     	$text+=col.innerText;
+			     	$text+=" ";
+			   }  
+			   $text+="\n";
+			}
+			
+			
+		     var data = new FormData();
+				
+				
+		     data.append("export",document.getElementById("export").name);
+		     data.append("wizard","notactive");
+		     data.append("import","notactive");
+		     data.append("news","notactive");
+		     data.append("textfile",$text);
 				
 				var xhr = new XMLHttpRequest();
 				xhr.open("POST","./php/index.php");
@@ -29,6 +47,7 @@
 				};
 				
 				xhr.send(data);
+				
 				
 				return false;
 			}
@@ -44,6 +63,7 @@
 				else data.append("import","notactive");
 				
 				data.append("export","notactive");
+				data.append("news","notactive");
 			
 				data.append("min_price_per_day",document.getElementById("min_price_per_day").value);
 				data.append("max_price_per_day",document.getElementById("max_price_per_day").value);
@@ -83,7 +103,7 @@
 				      let c11 = row.insertCell(10)
 
 				      // Add data to c1 and c2
-				      c1.innerText = lines[i * 10];
+				      c1.innerText = lines[i * 11];
 				      c2.innerText = lines[i*11 + 1];
 				      c3.innerText = lines[i*11 + 2];
 				      c4.innerText = lines[i*11 + 3];
@@ -128,7 +148,7 @@
 				xhr.onload = function(){
 				     var result = xhr.responseText;
 				     console.log(result);
-			             }
+			             
 				}
 				xhr.send(data);
 				
@@ -149,7 +169,7 @@
 			<button type="submit" class="btn" id="import" name="import_btn">Import</button>
 		     </form>
 		     <form onsubmit="return display_news()">
-			<button type="submit" class="btn" id="news" name="news_btn">Import</button>
+			<button type="submit" class="btn" id="news" name="news_btn">NEWS</button>
 		     </form>
 			
 			<table class="table" id="myTable">
