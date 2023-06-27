@@ -29,9 +29,9 @@
 			//print_r($aDataTableDetailHTML); die();
 			
 			//#Get row data/detail table with header name as key and outer array index as row number
-			for($i = 0; $i < count($aDataTableDetailHTML); $i++)
+			for($i = 0; $i < 11; $i++)
 			{
-				for($j = 0; $j < count($aDataTableHeaderHTML); $j++)
+				for($j = 0; $j < 11; $j++)
 				{
 					$aTempData[$i][$aDataTableHeaderHTML[$j]] = $aDataTableDetailHTML[$i][$j];
 				}
@@ -124,7 +124,7 @@
                                                 //return some value to know what happen
             				} 
             				else {
-            					//echo "Error inserting data: " . $conn->error;
+            					echo "Error inserting data: " . $conn->error;
             					//return some value to know what happen
             				}
             }  
@@ -152,7 +152,7 @@
 			}
 			
 			
-			$query = "SELECT *, ((day_cost - month_cost) / month_cost) as percentage_change_month ,((day_cost - year_cost) / year_cost) as percentage_change_year FROM Services WHERE day_cost > '{$min_price_per_day}' AND day_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}'";
+			$query = "SELECT *, ((day_cost - month_cost) / month_cost) as percentage_change_month, ((day_cost - year_cost) / year_cost) as percentage_change_year FROM Services WHERE day_cost > '{$min_price_per_day}' AND day_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}'";
 			
 			
 			if($regions_names == "default"){
@@ -161,7 +161,7 @@
 			
 			$result = $conn->query($query);
 
-			if ($result->num_rows > 0) {
+			if ($result !== false && $result->num_rows > 0) {
 			  // output data of each row
 			  while($row = $result->fetch_assoc()) {
 			  	$row_data= $row["name"] . "\n" . $row["api_name"] . "\n" . $row["memory"] . "\n" . $row["vcpus"] . "\n" . $row["storage"] . "\n" . $row["day_cost"] . "\n" . $row["month_cost"] . "\n" . $row["year_cost"] . "\n" . $row["region"] . "\n" . $row["percentage_change_month"] . "\n" . $row["percentage_change_year"] ;
@@ -180,7 +180,7 @@
         
         function get_information_for_news()
         {
-        	        $servername = "localhost";
+        	$servername = "localhost";
 			$username = "root";
 			$password = "";
 			$dbname = "myDB";
@@ -192,23 +192,46 @@
 			  //die("Connection failed: " . $conn->connect_error);
 			  //return some value to know what happen
 			}
-			
-			$query="SELECT name,day_cost,month_cost,year_cost  FROM Services";
-			$result = $conn->query($query);
 
-			if ($result->num_rows > 0) {
-			  // output data of each row
-			  while($row = $result->fetch_assoc()) {
-			  	$row_data= $row["name"] . "\n" . $row["day_cost"] . "\n" . $row["month_cost"] . "\n" . $row["year_cost"] ;
-			    echo $row_data;
-			    echo "\n";
-			  }
-			}
-			else {
-			  echo "0 results";
-			  echo "\n";
-			}
-			
+			$query = "SELECT name, day_cost, month_cost, year_cost  FROM Services ";
+
+            $resultSet = $conn->query($query);
+
+			if($resultSet->num_rows > 0) {
+
+			    $sentence = array();
+
+			    while($row = $resultSet->fetch_assoc()) {
+			        $sentence = "The service " .$row['name'] . " has a price of " .$row['day_cost'] . ". A month ago the price was " .$row['month_cost'] . ". A year ago the price was " .$row['year_cost'] . ".\n";
+
+			        echo $sentence;
+			    }
+
+
+
+//             $finalSentence = implode("\n", $sentences);
+//             echo $finalSentence;
+            }
+            else{
+            echo "No news";
+            }
+
+// 			$query="SELECT name, day_cost, month_cost, year_cost  FROM Services";
+// 			$result = $conn->query($query);
+//
+// 			if ($result->num_rows > 0) {
+// 			  // output data of each row
+// 			  while($row = $result->fetch_assoc()) {
+// 			  	$row_data= $row["name"] . "\n" . $row["day_cost"] . "\n" . $row["month_cost"] . "\n" . $row["year_cost"] ;
+// 			    echo $row_data;
+// 			    echo "\n";
+// 			  }
+// 			}
+// 			else {
+// 			  echo "0 results";
+// 			  echo "\n";
+// 			}
+//
 			
 			$conn->close();
         }
