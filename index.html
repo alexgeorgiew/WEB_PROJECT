@@ -10,6 +10,7 @@
 				while(document.getElementById("myTable").rows.length > 1){
 					document.getElementById("myTable").deleteRow(1);
 				}
+				return false;
 			}
 			
 			function wizard_func(){
@@ -31,12 +32,19 @@
 				
 				return false;
 			}
-			
-			function find_service(){
+			function get_data_from_database($action){
 				delete_html_table_content();
-				
 				var data = new FormData();
-				data.append("wizard",document.getElementById("wizard").name);
+				
+					
+				if($action == "wizard")data.append("wizard",document.getElementById("wizard").name);
+				else data.append("wizard","notactive");
+				
+				if($action == "import")data.append("import",document.getElementById("import").name);
+				else data.append("import","notactive");
+				
+				data.append("export","notactive");
+			
 				data.append("min_price_per_day",document.getElementById("min_price_per_day").value);
 				data.append("max_price_per_day",document.getElementById("max_price_per_day").value);
 				data.append("min_memory",document.getElementById("min_memory").value);
@@ -51,10 +59,11 @@
 					
 					
 				     var result = xhr.responseText;
+				     console.log(result);
 				     var lines=result.split('\n');
 				     let table = document.getElementById("myTable");
 
-   				     for(let i=0; i<(lines.length-1)/10	 ;i++){
+   				     for(let i=0; i<(lines.length-1)/11	 ;i++){
 
 				      // Create a row using the inserRow() method and
 				      // specify the index where you want to add the row
@@ -69,24 +78,58 @@
 				      let c6 = row.insertCell(5);
 				      let c7 = row.insertCell(6);
 				      let c8 = row.insertCell(7);
-					  let c9 = row.insertCell(8)
-					  let c10 = row.insertCell(9)
+				      let c9 = row.insertCell(8)
+				      let c10 = row.insertCell(9)
+				      let c11 = row.insertCell(10)
 
 				      // Add data to c1 and c2
-				      c1.innerText = lines[i * 8];
-				      c2.innerText = lines[i*8 + 1];
-				      c3.innerText = lines[i*8 + 2];
-				      c4.innerText = lines[i*8 + 3];
-				      c5.innerText = lines[i*8 + 4];
-				      c6.innerText = lines[i*8 + 5];
-				      c7.innerText = `${lines[i*8 + 6] + "per day"}`;
-				      c8.innerText = lines[i*8 + 7];
-				      c9.innerText = lines[i*8 + 8];
-				      c10.innerText = lines[i*8 + 9];
-				      }
-					// console.log(result);
-			      }
+				      c1.innerText = lines[i * 10];
+				      c2.innerText = lines[i*11 + 1];
+				      c3.innerText = lines[i*11 + 2];
+				      c4.innerText = lines[i*11 + 3];
+				      c5.innerText = lines[i*11 + 4];
+				      c6.innerText = lines[i*11 + 5];
+				      c7.innerText = lines[i*11 + 6];
+				      c8.innerText = lines[i*11 + 7];
+				      c9.innerText = lines[i*11 + 8];
+				      c10.innerText = lines[i*11 + 9];
+				      c11.innerText = lines[i*11 + 10];
+				      
+				      
+				      if(parseFloat(c10.innerText) < 0.00) c10.style.color="green";
+				      else if(parseFloat(c10.innerText) > 0.00) c10.style.color="red";
+				      
+				      if(parseFloat(c11.innerText) < 0.00) c11.style.color="green";
+				      else if(parseFloat(c11.innerText) > 0.00) c11.style.color="red";
+				      
+				      c10.innerText = `${lines[i*11 + 9]}%`;
+				      c11.innerText = `${lines[i*11 + 10]}%`;
+				      
+			             }
+				}
+				xhr.send(data);
 				
+				return false;
+			}
+			
+			function display_news(){
+				var data = new FormData();
+				
+					
+				
+				data.append("wizard","notactive");
+				data.append("import","notactive");
+				data.append("export","notactive");
+				data.append("news","news_btn")
+				
+				
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST","./php/index.php");
+				xhr.onload = function(){
+				     var result = xhr.responseText;
+				     console.log(result);
+			             }
+				}
 				xhr.send(data);
 				
 				return false;
@@ -102,6 +145,12 @@
 		     <form onsubmit="return export_func()">
 			<button type="submit" class="btn" id="export" name="export_btn">Export</button>
 		     </form>
+		     <form onsubmit="return get_data_from_database('import')">
+			<button type="submit" class="btn" id="import" name="import_btn">Import</button>
+		     </form>
+		     <form onsubmit="return display_news()">
+			<button type="submit" class="btn" id="news" name="news_btn">Import</button>
+		     </form>
 			
 			<table class="table" id="myTable">
 				<thead>
@@ -111,16 +160,17 @@
 						<th class="table_head">Memory</th>
 						<th class="table_head">vCPUs</th>
 						<th class="table_head">Storage</th>
-						<th class="table_head">I/O</th>
-						<th class="table_head">Node On Demand cost</th>
-						<th class="table_head">Node Reserved cost</th>
+						<th class="table_head">Today price</th>
+						<th class="table_head">Month ago price</th>
+						<th class="table_head">Year ago price</th>
 						<th class="table_head">Region</th>
-						<th class="table_head">Percentage Change</th>
+						<th class="table_head">Percentage Change Month</th>
+						<th class="table_head">Percentage Change Year</th>
 
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<!--<tr>
 						<td><a>dense compute</a></td>
 						<td><a>dc</a></td>
 						<td><a>15gib</a></td>
@@ -139,11 +189,11 @@
 						<td><a>0.4gb/s</a></td>
 						<td><a>$99 day</a></td>
 						<td><a>$80 day</a></td>
-					</tr>
+					</tr>-->
 				</tbody>
 			</table>
 			
-			<form class="form" id="wizard_form" onsubmit="return find_service()">
+			<form class="form" id="wizard_form" onsubmit="return get_data_from_database('wizard')">
 				<select class="drop_down" id="regions_names">
 						<option value="London">Europe (London)</option> 
 						<option value="Paris">Europe (Paris)</option> 
@@ -161,6 +211,14 @@
 				
 				<button type="submit" class="wizard_form_btn" id="wizard_find" name="Find">Find</button>
 			</form>
+			
+			<h1>NEWS:</h1>
+			<hr>
+			
+			
+			<div id="news">
+				<p>sadad</p>
+			</div>
 		</main>
 	</body>
 </html>
