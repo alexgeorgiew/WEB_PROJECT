@@ -19,12 +19,27 @@
 			}
 			
 			function export_func(){
-				var data = new FormData();
-				data.append("export",document.getElementById("export").name);
-				data.append("wizard","notactive");
-				data.append("import","notactive");
+
+			var table = document.getElementById("myTable");
+			let $text="";
+			for (var i = 1, row; row = table.rows[i]; i++) {
+			   for (var j = 0, col; col = row.cells[j]; j++) {
+			     	$text+=col.innerText;
+			     	$text+=" ";
+			   }
+			   $text+="\n";
+			}
 
 
+		     var data = new FormData();
+
+
+		     data.append("export",document.getElementById("export").name);
+		     data.append("wizard","notactive");
+		     data.append("import","notactive");
+		     data.append("news","notactive");
+		     data.append("textfile",$text);
+				
 				var xhr = new XMLHttpRequest();
 				xhr.open("POST","./php/index.php");
 				xhr.onload = function(){
@@ -47,7 +62,8 @@
 				else data.append("import","notactive");
 				
 				data.append("export","notactive");
-			
+				data.append("news","notactive");
+
 				data.append("min_price_per_day",document.getElementById("min_price_per_day").value);
 				data.append("max_price_per_day",document.getElementById("max_price_per_day").value);
 				data.append("min_memory",document.getElementById("min_memory").value);
@@ -131,15 +147,14 @@
 				xhr.onload = function(){
 				     var result = xhr.responseText;
 				     console.log(result);
-
 					var lines=result.split('\n');
 
-					for(let i=0; i<(lines.length-1) ;i++){
-					var tag = document.createElement("p");
-					var text = document.createTextNode(lines.at(i));
-					tag.appendChild(text);
-					var element = document.getElementById("news");
-					element.appendChild(tag);
+					for(let i=0; i<(lines.length-1) ;i++) {
+						var tag = document.createElement("p");
+						var text = document.createTextNode(lines.at(i));
+						tag.appendChild(text);
+						var element = document.getElementById("news");
+						element.appendChild(tag);
 
 					}
 				}
