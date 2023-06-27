@@ -97,8 +97,8 @@
 		vcpus VARCHAR(50) NOT NULL,
 		storage VARCHAR(50) NOT NULL,
 		io VARCHAR(50) NOT NULL,
-		node_on_demand_cost VARCHAR(50) NOT NULL,
-		node_reserved_cost VARCHAR(50) NOT NULL,
+		node_on_demand_cost  DOUBLE PRECISION(5,2) NOT NULL,
+		node_reserved_cost DOUBLE PRECISION(5,2) NOT NULL,
 		region VARCHAR(50) NOT NULL
 		)";
 
@@ -144,7 +144,7 @@
                             }
             }
 
-			$query = "SELECT * FROM Services WHERE memory > '{$min_memory}'";
+			$query = "SELECT *, ((node_reserved_cost - node_on_demand_cost) / node_on_demand_cost) as percentage_change FROM Services WHERE memory > '{$min_memory}' ";
 // 			-- 			 node_on_demand_cost > '{$min_price_per_day}' AND node_on_demand_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}' ";
 			
 			$result = $conn->query($query);
@@ -152,7 +152,7 @@
 			if ($result->num_rows > 0) {
 			  // output data of each row
 			  while($row = $result->fetch_assoc()) {
-			  	$row_data= $row["name"] . "\n" . $row["api_name"] . "\n" . $row["memory"] . "\n" . $row["vcpus"] . "\n" . $row["storage"] . "\n" . $row["io"] . "\n" . $row["node_on_demand_cost"] . "\n" . $row["node_reserved_cost"];
+			  	$row_data= $row["name"] . "\n" . $row["api_name"] . "\n" . $row["memory"] . "\n" . $row["vcpus"] . "\n" . $row["storage"] . "\n" . $row["io"] . "\n" . $row["node_on_demand_cost"] . "\n" . $row["node_reserved_cost"] . "\n" . $row["region"] . "\n" . $row["percentage_change"];
 			    echo $row_data;
 			    echo "\n";
 			  }

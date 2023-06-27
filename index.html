@@ -54,7 +54,7 @@
 				     var lines=result.split('\n');
 				     let table = document.getElementById("myTable");
 
-   				     for(let i=0; i<(lines.length-1)/8 ;i++){
+   				     for(let i=0; i<(lines.length-1)/10	 ;i++){
 
 				      // Create a row using the inserRow() method and
 				      // specify the index where you want to add the row
@@ -69,16 +69,20 @@
 				      let c6 = row.insertCell(5);
 				      let c7 = row.insertCell(6);
 				      let c8 = row.insertCell(7);
+					  let c9 = row.insertCell(8)
+					  let c10 = row.insertCell(9)
 
 				      // Add data to c1 and c2
-				      c1.innerText = lines[i*8 + 0];
+				      c1.innerText = lines[i * 8];
 				      c2.innerText = lines[i*8 + 1];
 				      c3.innerText = lines[i*8 + 2];
 				      c4.innerText = lines[i*8 + 3];
 				      c5.innerText = lines[i*8 + 4];
 				      c6.innerText = lines[i*8 + 5];
-				      c7.innerText = lines[i*8 + 6];
+				      c7.innerText = `${lines[i*8 + 6] + "per day"}`;
 				      c8.innerText = lines[i*8 + 7];
+				      c9.innerText = lines[i*8 + 8];
+				      c10.innerText = lines[i*8 + 9];
 				      }
 					// console.log(result);
 			      }
@@ -110,7 +114,9 @@
 						<th class="table_head">I/O</th>
 						<th class="table_head">Node On Demand cost</th>
 						<th class="table_head">Node Reserved cost</th>
-						
+						<th class="table_head">Region</th>
+						<th class="table_head">Percentage Change</th>
+
 					</tr>
 				</thead>
 				<tbody>
