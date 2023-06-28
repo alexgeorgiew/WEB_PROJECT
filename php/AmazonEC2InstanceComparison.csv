@@ -2,7 +2,7 @@ T4G Nano,t4g.nano,0.5 GiB,2 vCPUs,1 TB,0.072,0.075,0.07,London
 T3A Nano,t3a.nano,0.5 GiB,2 vCPUs,2 TB,0.09,0.09,0.09,Paris
 C6G Medium,c6g.medium,2.0 GiB,1 vCPUs,5 TB,2.34,2.23,2.12,London
 A1 MEDIUM,a1.medium,3.75 GiB,4 vCPUs,6 TB,1.23,1.34,1.44,London
-C4 High-CPU,c4.large,4 GiB,,8 vCPUs,10TB,0.89,0.99,1.00,Paris
+C4 High-CPU,c4.large,4 GiB,8 vCPUs,10TB,0.89,0.99,1.00,Paris
 C6ID Large,c6id.large,5 Gib,20 vCPUs,10TB,4.23,4.22,3.34,London
 C6IN Large,c6in.large,6 Gib,16 vCPUs,15TB,5.1,5.2,5.0,London
 M6GD Medium,m6gd.medium,7 Gib,8 vCPUs,20TB,6.123,7.123,8.123,Paris
