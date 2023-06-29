@@ -5,6 +5,7 @@
 			    fwrite($myfile, $text);
 			    fclose($myfile);
         }
+        
         function create_database(){
         	$servername = "localhost";
 		$username = "root";
@@ -29,6 +30,7 @@
 		//return some value to know what happen
 		
         }
+        
         function create_database_table(){
         	$servername = "localhost";
 		$username = "root";
@@ -69,6 +71,7 @@
 		//return some value to know what happen
 		$conn->close();
         }
+        
         function get_csv_and_fill_database($conn)
         {
         
@@ -89,7 +92,7 @@
             }  
         }
         
-        function get_data_from_database($min_price_per_day = "default", $max_price_per_day = "default", $min_memory =  "default",$max_memory =  "default", $regions_names = "default"){
+        function get_file_data_and_insert_in_database($min_price_per_day = "default", $max_price_per_day = "default", $min_memory =  "default",$max_memory =  "default", $regions_names = "default"){
         		$servername = "localhost";
 			$username = "root";
 			$password = "";
@@ -111,11 +114,11 @@
 			}
 			
 			
-			$query = "SELECT *, ((day_cost - month_cost) / month_cost) as percentage_change_month ,((day_cost - year_cost) / year_cost) as percentage_change_year FROM Services WHERE day_cost > '{$min_price_per_day}' AND day_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}'";
+			$query = "SELECT *, (((day_cost - month_cost) / month_cost)*100) as percentage_change_month ,(((day_cost - year_cost) / year_cost)*100) as percentage_change_year FROM Services WHERE day_cost > '{$min_price_per_day}' AND day_cost < '{$max_price_per_day}' AND memory > '{$min_memory}' AND memory < '{$max_memory}' AND region = '{$regions_names}'";
 			
 			
 			if($regions_names == "default"){
-			 $query = "SELECT *, ((day_cost - month_cost) / month_cost) as percentage_change_month ,((day_cost - year_cost) / year_cost) as percentage_change_year FROM Services";
+			 $query = "SELECT *, (((day_cost - month_cost) / month_cost)*100) as percentage_change_month ,(((day_cost - year_cost) / year_cost)*100) as percentage_change_year FROM Services";
 			}
 			
 			$result = $conn->query($query);
@@ -154,46 +157,44 @@
 
 			$query = "SELECT name, day_cost, month_cost, year_cost  FROM Services ";
 
-            $resultSet = $conn->query($query);
+            		$resultSet = $conn->query($query);
 
 			if($resultSet->num_rows > 0) {
+				$sentence = array();
 
-			    $sentence = array();
-
-			    while($row = $resultSet->fetch_assoc()) {
-			        $sentence = "The service " .$row['name'] . " has a price of " .$row['day_cost'] . ". A month ago the price was " .$row['month_cost'] . ". A year ago the price was " .$row['year_cost'] . ".\n";
-
+			    	while($row = $resultSet->fetch_assoc()) {
+			        	$sentence = "The service " .$row['name'] . " has a price of " .$row['day_cost'] . ". A month ago the price was " .$row['month_cost'] . ". A year ago the price was " .$row['year_cost'] . ".\n";
 			        echo $sentence;
-			    }
-
-
-
-//             $finalSentence = implode("\n", $sentences);
-//             echo $finalSentence;
-            }
-            else{
-            echo "No news";
-            }
-
-// 			$query="SELECT name, day_cost, month_cost, year_cost  FROM Services";
-// 			$result = $conn->query($query);
-//
-// 			if ($result->num_rows > 0) {
-// 			  // output data of each row
-// 			  while($row = $result->fetch_assoc()) {
-// 			  	$row_data= $row["name"] . "\n" . $row["day_cost"] . "\n" . $row["month_cost"] . "\n" . $row["year_cost"] ;
-// 			    echo $row_data;
-// 			    echo "\n";
-// 			  }
-// 			}
-// 			else {
-// 			  echo "0 results";
-// 			  echo "\n";
-// 			}
-//
+			    	}
+            		}
+            		else echo "No news";
 			
 			$conn->close();
         }
+        
+        function clear_data_from_database()
+        {
+        	        $servername = "localhost";
+			$username = "root";
+			$password = "";
+			$dbname = "myDB";
+
+			// Create connection
+			$conn = new mysqli($servername, $username, $password, $dbname);
+			// Check connection
+			if ($conn->connect_error) {
+			  //die("Connection failed: " . $conn->connect_error);
+			  //return some value to know what happen
+			}
+			
+			$query="DELETE FROM Services";
+			$conn->query($query);
+			$conn->close();
+        }
+        
+        
+        
+        
         
         create_database();
         create_database_table();
@@ -218,7 +219,7 @@
         		$correct="0";
         	}
         	
-        	if($correct == "1")get_data_from_database($_POST['min_price_per_day'],$_POST['max_price_per_day'],$_POST['min_memory'],$_POST['max_memory'],$_POST['regions_names']);
+        	if($correct == "1")get_file_data_and_insert_in_database($_POST['min_price_per_day'],$_POST['max_price_per_day'],$_POST['min_memory'],$_POST['max_memory'],$_POST['regions_names']);
         }
         else if($_POST['export']=="export_btn")
         {
@@ -226,11 +227,16 @@
         }
         else if($_POST['import']=="import_btn")
         {
-         	get_data_from_database();
+        	clear_data_from_database();
+         	get_file_data_and_insert_in_database();
         }
         else if($_POST['news']=="news_btn")
         {
         	get_information_for_news();
+        }
+        else if($_POST['onlyget'] == "onlyget")
+        {
+        	get_file_data_and_insert_in_database();
         }
         
         
