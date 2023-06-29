@@ -5,16 +5,35 @@
 		<link rel="stylesheet" href="css/index.css">
 		<title>Cloud Services Analyzator</title>
 		<script>
-		
+			function toFixed(value, precision) {
+			    var power = Math.pow(10, precision || 0);
+			    return String(Math.round(value * power) / power);
+			}
 			function delete_html_table_content(){
 				while(document.getElementById("myTable").rows.length > 1){
 					document.getElementById("myTable").deleteRow(1);
 				}
 				return false;
 			}
-			
+			function clear_news(){
+				document.getElementById("news").innerHTML="";
+				
+				/*while(document.getElementById("news")..childElementCount > 0){
+					document.getElementById("myTable").deleteRow(1);
+				}*/
+				return false;
+			}
 			function wizard_func(){
-				document.getElementById("wizard_form").style.visibility="visible";
+				var vi=document.getElementById("wizard_form").style.visibility;
+				if(vi == "visible")
+				{
+					document.getElementById("wizard_form").style.visibility = "hidden";
+				}
+				else 
+				{
+					document.getElementById("wizard_form").style.visibility = "visible";
+				}
+				
 				return false;
 			}
 			
@@ -54,12 +73,17 @@
 				delete_html_table_content();
 				var data = new FormData();
 				
-					
+				document.getElementById("import").disabled= true;
 				if($action == "wizard")data.append("wizard",document.getElementById("wizard").name);
 				else data.append("wizard","notactive");
 				
-				if($action == "import")data.append("import",document.getElementById("import").name);
+				if($action == "import"){
+					data.append("import",document.getElementById("import").name);
+				}
 				else data.append("import","notactive");
+				
+				if($action == "onlyget")data.append("onlyget","onlyget");
+				else data.append("onlyget","notactive");
 				
 				data.append("export","notactive");
 				data.append("news","notactive");
@@ -73,10 +97,7 @@
 				
 				var xhr = new XMLHttpRequest();
 				xhr.open("POST","./php/index.php");
-				xhr.onload = function(){
-				
-					
-					
+				xhr.onload = function(){	
 				     var result = xhr.responseText;
 				     console.log(result);
 				     var lines=result.split('\n');
@@ -121,10 +142,11 @@
 				      if(parseFloat(c11.innerText) < 0.00) c11.style.color="green";
 				      else if(parseFloat(c11.innerText) > 0.00) c11.style.color="red";
 				      
-				      c10.innerText = `${lines[i*11 + 9]}%`;
-				      c11.innerText = `${lines[i*11 + 10]}%`;
+				      c10.innerText = `${toFixed(lines[i*11 + 9],2)}%`;
+				      c11.innerText = `${toFixed(lines[i*11 + 10],2)}%`;
 				      
 			             }
+			             document.getElementById("import").disabled = false;
 				}
 				xhr.send(data);
 				
@@ -132,6 +154,7 @@
 			}
 			
 			function display_news(){
+				clear_news();
 				var data = new FormData();
 				
 					
@@ -162,66 +185,140 @@
 				
 				return false;
 			}
+			
+			function sortTable(n) {
+				  var alphabet_sort = false;
+				  if(n == 0 || n == 1 || n == 8 )alphabet_sort = true;
+				  
+				  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+				  table = document.getElementById("myTable");
+				  switching = true;
+				  // Set the sorting direction to ascending:
+				  dir = "asc";
+				  /* Make a loop that will continue until
+				  no switching has been done: */
+				  while (switching) {
+					    // Start by saying: no switching is done:
+					    switching = false;
+					    rows = table.rows;
+					    /* Loop through all table rows (except the
+					    first, which contains table headers): */
+					    for (i = 1; i < (rows.length - 1); i++) {
+						      // Start by saying there should be no switching:
+						      shouldSwitch = false;
+						      /* Get the two elements you want to compare,
+						      one from current row and one from the next: */
+						      x = rows[i].getElementsByTagName("TD")[n].innerText;
+						      y = rows[i + 1].getElementsByTagName("TD")[n].innerText;
+						      
+						      /*Get only the number from the specified column*/
+						      if(n == 2 || n == 3 || n == 4 || n == 9 || n == 10)
+						      {
+						      	let symbol = " ";
+						      	
+						      	if(n == 9 || n == 10)symbol="%";
+						      	
+						      	let text_x = x;
+						      	let text_y = y;
+							const myArray_x = String(text_x).split(symbol);
+							const myArray_y = String(text_y).split(symbol);
+							x = myArray_x[0];
+							console.log(`x=${x}`);
+							y = myArray_y[0];
+						      }
+						      
+						      
+						      /* Check if the two rows should switch place,
+						      based on the direction, asc or desc: */
+						      if (dir == "asc") {
+						      	
+							if (String(x).toLowerCase() > String(y).toLowerCase() && alphabet_sort == true) {
+							  // If so, mark as a switch and break the loop:
+							  shouldSwitch = true;
+							  break;
+							}
+							if (Number(x) > Number(y) && alphabet_sort == false) {
+							  shouldSwitch = true;
+							  break;
+							}
+							
+						      } else if (dir == "desc") {
+						      
+							if (String(x).toLowerCase() < String(y).toLowerCase() && alphabet_sort == true) {
+							  // If so, mark as a switch and break the loop:
+							  shouldSwitch = true;
+							  break;
+							}
+							if (Number(x) < Number(y) && alphabet_sort == false) {
+							  shouldSwitch = true;
+							  break;
+							}
+						      }
+						      
+						    }
+						    
+						    if (shouldSwitch) {
+						      	      /* If a switch has been marked, make the switch
+							      and mark that a switch has been done: */
+							      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+							      switching = true;
+							      // Each time a switch is done, increase this count by 1:
+							      switchcount ++;
+						    }
+						    else {
+						      /* If no switching has been done AND the direction is "asc",
+						      set the direction to "desc" and run the while loop again. */
+						      if (switchcount == 0 && dir == "asc") {
+								dir = "desc";
+								switching = true;
+								console.log("huq");
+						      }
+					            }
+					            console.log(switchcount);
+					    
+				 }
+			}
+
 		</script>
 	</head>
 	
-	<body>
+	<body onload = "get_data_from_database('onlyget')">
 		<main id="main">
-		     <form onsubmit="return wizard_func()">
+		     <form onsubmit="return wizard_func()" class="btnform">
 			<button type="submit" class="btn" id="wizard" name="wizard_btn" >Find service</button>
 		     </form>
-		     <form onsubmit="return export_func()">
+		     <form onsubmit="return export_func()" class="btnform">
 			<button type="submit" class="btn" id="export" name="export_btn">Export</button>
 		     </form>
-		     <form onsubmit="return get_data_from_database('import')">
+		     <form onsubmit="return get_data_from_database('import')" class="btnform">
 			<button type="submit" class="btn" id="import" name="import_btn">Import</button>
 		     </form>
-		     <form onsubmit="return display_news()">
+		     <form onsubmit="return display_news()" class="btnform">
 			<button type="submit" class="btn" id="news_btn" name="news_btn">News</button>
 		     </form>
 			
 			<table class="table" id="myTable">
-				<thead>
+				<thead class="table_head">
 					<tr>
-						<th class="table_head">Name</th>
-						<th class="table_head">API Name</th>
-						<th class="table_head">Memory</th>
-						<th class="table_head">vCPUs</th>
-						<th class="table_head">Storage</th>
-						<th class="table_head">Today price</th>
-						<th class="table_head">Month ago price</th>
-						<th class="table_head">Year ago price</th>
-						<th class="table_head">Region</th>
-						<th class="table_head">Percentage Change Month</th>
-						<th class="table_head">Percentage Change Year</th>
+						<th class="table_head" onclick="sortTable(0)" >Name</th>
+						<th class="table_head"onclick="sortTable(1)" >API Name</th>
+						<th class="table_head" onclick="sortTable(2)">Memory</th>
+						<th class="table_head" onclick="sortTable(3)">vCPUs</th>
+						<th class="table_head" onclick="sortTable(4)">Storage</th>
+						<th class="table_head" onclick="sortTable(5)">Today price</th>
+						<th class="table_head" onclick="sortTable(6)">Month ago price</th>
+						<th class="table_head" onclick="sortTable(7)">Year ago price</th>
+						<th class="table_head" onclick="sortTable(8)">Region</th>
+						<th class="table_head" onclick="sortTable(9)">Percentage Change Month</th>
+						<th class="table_head" onclick="sortTable(10)">Percentage Change Year</th>
 
 					</tr>
 				</thead>
-				<tbody>
-					<!--<tr>
-						<td><a>dense compute</a></td>
-						<td><a>dc</a></td>
-						<td><a>15gib</a></td>
-						<td><a>2 vcpus</a></td>
-						<td><a>1tb ssd</a></td>
-						<td><a>0.5gb/s</a></td>
-						<td><a>$1.2 day</a></td>
-						<td><a>$1 day</a></td>
-					</tr>
-					<tr>
-						<td><a>managed storage</a></td>
-						<td><a>ra3</a></td>
-						<td><a>10gib</a></td>
-						<td><a>2vcpu</a></td>
-						<td><a>0.1tb ssd</a></td>
-						<td><a>0.4gb/s</a></td>
-						<td><a>$99 day</a></td>
-						<td><a>$80 day</a></td>
-					</tr>-->
+				<tbody class="table_body">
 				</tbody>
 			</table>
 			
-			<form class="form" id="wizard_form" onsubmit="return get_data_from_database('wizard')">
+			<form class="wizard_form" id="wizard_form" onsubmit="return get_data_from_database('wizard')">
 				<select class="drop_down" id="regions_names">
 						<option value="London">Europe (London)</option> 
 						<option value="Paris">Europe (Paris)</option> 
@@ -229,13 +326,13 @@
 						<option value="Tokyo">Asia-Pacific (Tokyo)</option> 
 				</select></br>
 				
-				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day"></br>
+				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day">Min price per day</br>
 				
-				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day"></br>
+				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day">Max price per day</br>
 				
-				<input type="number" class="input_wizard" id="min_memory" placeholder="Min Gib"></br>
+				<input type="number" class="input_wizard" id="min_memory" placeholder="Min Gib">Min Gib</br>
 				
-				<input type="number" class="input_wizard" id="max_memory" placeholder="Max Gib"></br>
+				<input type="number" class="input_wizard" id="max_memory" placeholder="Max Gib">Max Gib</br>
 				
 				<button type="submit" class="wizard_form_btn" id="wizard_find" name="Find">Find</button>
 			</form>
