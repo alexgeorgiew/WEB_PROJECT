@@ -5,22 +5,24 @@
 		<link rel="stylesheet" href="css/index.css">
 		<title>Cloud Services Analyzator</title>
 		<script>
+			let isSetListen=false;
+			let global_rowsLen = 0;
+			var global_HTML_table;
 			function toFixed(value, precision) {
 			    var power = Math.pow(10, precision || 0);
 			    return String(Math.round(value * power) / power);
 			}
 			function delete_html_table_content(){
-				while(document.getElementById("myTable").rows.length > 1){
-					document.getElementById("myTable").deleteRow(1);
+				var table=document.getElementById('myTable').getElementsByTagName('tbody')[0];
+				while(table.rows.length > 0){
+					table.deleteRow(0);
 				}
+				
 				return false;
 			}
 			function clear_news(){
 				document.getElementById("news").innerHTML="";
 				
-				/*while(document.getElementById("news")..childElementCount > 0){
-					document.getElementById("myTable").deleteRow(1);
-				}*/
 				return false;
 			}
 			function wizard_func(){
@@ -39,12 +41,12 @@
 			
 			function export_func(){
 
-			var table = document.getElementById("myTable");
+			var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
 			let $text="";
-			for (var i = 1, row; row = table.rows[i]; i++) {
+			for (var i = 0, row; row = table.rows[i]; i++) {
 			   for (var j = 0, col; col = row.cells[j]; j++) {
 			     	$text+=col.innerText;
-			     	$text+=" ";
+			     	if( j < row.cells.length -1 )$text+=",";
 			   }
 			   $text+="\n";
 			}
@@ -71,6 +73,8 @@
 			}
 			function get_data_from_database($action){
 				delete_html_table_content();
+				
+				
 				var data = new FormData();
 				
 				document.getElementById("import").disabled= true;
@@ -82,7 +86,14 @@
 				}
 				else data.append("import","notactive");
 				
-				if($action == "onlyget")data.append("onlyget","onlyget");
+				if($action == "onlyget")
+				{
+					if(isSetListen == false){
+						setListeners();
+						isSetListen = true;
+					}	     
+					data.append("onlyget","onlyget");
+				}
 				else data.append("onlyget","notactive");
 				
 				data.append("export","notactive");
@@ -97,12 +108,14 @@
 				
 				var xhr = new XMLHttpRequest();
 				xhr.open("POST","./php/index.php");
-				xhr.onload = function(){	
+				xhr.onload = function(){
+				      global_rowsLen=0;
 				     var result = xhr.responseText;
-				     console.log(result);
+				     //console.log(result);
 				     var lines=result.split('\n');
-				     let table = document.getElementById("myTable");
-
+				     //let table = document.getElementById("table_body");
+				     let table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+   				    
    				     for(let i=0; i<(lines.length-1)/11	 ;i++){
 
 				      // Create a row using the inserRow() method and
@@ -144,11 +157,14 @@
 				      
 				      c10.innerText = `${toFixed(lines[i*11 + 9],2)}%`;
 				      c11.innerText = `${toFixed(lines[i*11 + 10],2)}%`;
-				      
+				      global_rowsLen += 1;
 			             }
 			             document.getElementById("import").disabled = false;
+			             global_HTML_table = table.innerHTML;
+			
 				}
 				xhr.send(data);
+				
 				
 				return false;
 			}
@@ -191,7 +207,8 @@
 				  if(n == 0 || n == 1 || n == 8 )alphabet_sort = true;
 				  
 				  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-				  table = document.getElementById("myTable");
+				  table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+				  
 				  switching = true;
 				  // Set the sorting direction to ascending:
 				  dir = "asc";
@@ -203,7 +220,7 @@
 					    rows = table.rows;
 					    /* Loop through all table rows (except the
 					    first, which contains table headers): */
-					    for (i = 1; i < (rows.length - 1); i++) {
+					    for (i = 0; i < (rows.length - 1); i++) {
 						      // Start by saying there should be no switching:
 						      shouldSwitch = false;
 						      /* Get the two elements you want to compare,
@@ -271,13 +288,122 @@
 						      if (switchcount == 0 && dir == "asc") {
 								dir = "desc";
 								switching = true;
-								console.log("huq");
 						      }
 					            }
 					            console.log(switchcount);
 					    
 				 }
-			}
+			  }
+			  
+			  function setListeners(){
+			  	document.getElementsByClassName("form-control")[0].addEventListener('input', function() {
+			  	        
+			  		let value = document.getElementsByClassName("form-control")[0].value;
+			  		
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		if(value.length > 0)ApplyFilterTable(0,true,value.toLowerCase());
+			  	});
+			  	document.getElementsByClassName("form-control")[1].addEventListener('input', function(){
+			  		let value=document.getElementsByClassName("form-control")[1].value;
+			  		
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		if(value.length > 0)ApplyFilterTable(1,true,value.toLowerCase());
+			  	});
+			  	document.getElementsByClassName("form-control")[2].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[2].value;
+			  		ApplyFilterTable(2,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[3].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[3].value;
+			  		ApplyFilterTable(3,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[4].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[4].value;
+			  		ApplyFilterTable(4,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[5].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[5].value;
+			  		ApplyFilterTable(5,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[6].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[6].value;
+			  		ApplyFilterTable(6,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[7].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[7].value;
+			  		ApplyFilterTable(7,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[8].addEventListener('input', function(){
+			  		let value=document.getElementsByClassName("form-control")[8].value;
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		if(value.length > 0)ApplyFilterTable(8,true,value.toLowerCase());
+			  	});
+			  	document.getElementsByClassName("form-control")[9].addEventListener('input', function(){
+			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[9].value;
+			  		ApplyFilterTable(9,false,value);
+			  	});
+			  	document.getElementsByClassName("form-control")[10].addEventListener('input', function(){
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  		let value=document.getElementsByClassName("form-control")[10].value;
+			  		ApplyFilterTable(10,false,value);
+			  	});
+			  	
+			  	return false;
+			  }
+			  
+			  function ApplyFilterTable(column,alphabet,value){
+			        
+			        console.log("dobre1");
+			  	if( document.getElementById('myTable').getElementsByTagName('tbody')[0].rows.length == 0 )
+			  	{
+			  		return false;
+			  	}
+			  	console.log("dobre2");
+			  	
+			  	
+			  	
+			  	var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+			  	if(alphabet == true)
+			  	{
+			  		
+			  		var rows = table.rows;
+			  		countRows=rows.length
+			  		for (let i = 0; i < countRows ; i++) {
+			  			var textcell = rows[i].getElementsByTagName("TD")[column].innerText;
+			  			let minLen=Math.min(value.length,textcell.length);
+			  			if( AreEqual(value,textcell.toLowerCase(),minLen) == false ){
+			  				table.deleteRow(i);
+			  				console.log("vlixa");
+			  				i--;
+			  				countRows--;
+			  			}
+			  			
+			  			if(rows.length == 0)break;
+			  		}
+			  	}
+			  	else
+			  	{
+			  	
+			  	}
+			      
+			  }
+			  
+			  function AreEqual(str1,str2,n)
+			  {
+			  	for( let i=0 ; i<n ; i++)
+			  	{
+			  		if(str1.charAt(i) != str2.charAt(i) )return false;
+			  	}
+			  	return true;
+			  }
+			
 
 		</script>
 	</head>
@@ -312,6 +438,19 @@
 						<th class="table_head" onclick="sortTable(9)">Percentage Change Month</th>
 						<th class="table_head" onclick="sortTable(10)">Percentage Change Year</th>
 
+					</tr>
+					<tr>
+						<th> <input type="text" class="form-control" placeholder="Filter..."> </th>
+						<th> <input type="text" class="form-control" placeholder="Filter..."> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Mem: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min vCPUs: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Storage: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Tprice: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Mprice: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Yprice: 0"> </th>
+						<th> <input type="text" class="form-control" placeholder="Filter..."> </th>
+						<th> <input type="text" class="form-control" placeholder="Percentage Month:"> </th>
+						<th> <input type="text" class="form-control" placeholder="Percentage Year:"> </th>
 					</tr>
 				</thead>
 				<tbody class="table_body">
