@@ -74,7 +74,6 @@
 			function get_data_from_database($action){
 				delete_html_table_content();
 				
-				
 				var data = new FormData();
 				
 				document.getElementById("import").disabled= true;
@@ -82,6 +81,7 @@
 				else data.append("wizard","notactive");
 				
 				if($action == "import"){
+					ClearAllInputs();
 					data.append("import",document.getElementById("import").name);
 				}
 				else data.append("import","notactive");
@@ -212,6 +212,9 @@
 				  switching = true;
 				  // Set the sorting direction to ascending:
 				  dir = "asc";
+				  hideAllArrows();
+				  document.getElementById('myTable').getElementsByTagName('span')[2*n].style.visibility="visible";
+				  document.getElementById('myTable').getElementsByTagName('span')[2*n+1].style.visibility="hidden";
 				  /* Make a loop that will continue until
 				  no switching has been done: */
 				  while (switching) {
@@ -287,6 +290,8 @@
 						      set the direction to "desc" and run the while loop again. */
 						      if (switchcount == 0 && dir == "asc") {
 								dir = "desc";
+								document.getElementById('myTable').getElementsByTagName('span')[2*n+1].style.visibility="visible";
+				  				document.getElementById('myTable').getElementsByTagName('span')[2*n].style.visibility="hidden";
 								switching = true;
 						      }
 					            }
@@ -296,63 +301,113 @@
 			  }
 			  
 			  function setListeners(){
+			  
 			  	document.getElementsByClassName("form-control")[0].addEventListener('input', function() {
-			  	        
+			  	      
 			  		let value = document.getElementsByClassName("form-control")[0].value;
 			  		
 			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
-			  		if(value.length > 0)ApplyFilterTable(0,true,value.toLowerCase());
+			  		ApplyTheRestFilters(0);
+			  		if(value.length > 0){
+			  			ApplyFilterTable(0,true,value.toLowerCase());
+			  		}
+			  	
 			  	});
+			  	
 			  	document.getElementsByClassName("form-control")[1].addEventListener('input', function(){
 			  		let value=document.getElementsByClassName("form-control")[1].value;
 			  		
 			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
-			  		if(value.length > 0)ApplyFilterTable(1,true,value.toLowerCase());
+			  		ApplyTheRestFilters(1);
+			  		if(value.length > 0){
+			  			ApplyFilterTable(1,true,value.toLowerCase());
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[2].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[2].value;
-			  		ApplyFilterTable(2,false,value);
+			  		ApplyTheRestFilters(2);
+			  		if( value.length > 0 && isNumber(value) == true )
+			  		{
+			  			ApplyFilterTable(2,false,value);
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[3].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[3].value;
-			  		ApplyFilterTable(3,false,value);
+			  		ApplyTheRestFilters(3);
+			  		if( value.length > 0 && isNumber(value) == true )
+			  		{
+			  			ApplyFilterTable(3,false,value);
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[4].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[4].value;
-			  		ApplyFilterTable(4,false,value);
+			  		ApplyTheRestFilters(4);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(4,false,value);
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[5].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[5].value;
-			  		ApplyFilterTable(5,false,value);
+			  		ApplyTheRestFilters(5);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(5,false,value);
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[6].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[6].value;
-			  		ApplyFilterTable(6,false,value);
+			  		ApplyTheRestFilters(6);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(6,false,value);
+			  		}
 			  	});
+			  	
 			  	document.getElementsByClassName("form-control")[7].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[7].value;
-			  		ApplyFilterTable(7,false,value);
+			  		ApplyTheRestFilters(7);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(7,false,value);
+			  		}
 			  	});
+			  	
 			  	document.getElementsByClassName("form-control")[8].addEventListener('input', function(){
+			  	
 			  		let value=document.getElementsByClassName("form-control")[8].value;
 			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
-			  		if(value.length > 0)ApplyFilterTable(8,true,value.toLowerCase());
+			  		ApplyTheRestFilters(8);
+			  		if(value.length > 0){
+			  			ApplyFilterTable(8,true,value.toLowerCase());
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[9].addEventListener('input', function(){
-			  	document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
+			  	
+			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[9].value;
-			  		ApplyFilterTable(9,false,value);
+			  		ApplyTheRestFilters(9);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(9,false,value);
+			  		}
 			  	});
 			  	document.getElementsByClassName("form-control")[10].addEventListener('input', function(){
+			  		
 			  		document.getElementById('myTable').getElementsByTagName('tbody')[0].innerHTML = global_HTML_table;
 			  		let value=document.getElementsByClassName("form-control")[10].value;
-			  		ApplyFilterTable(10,false,value);
+			  		ApplyTheRestFilters(10);
+			  		if( value.length > 0 && isNumber(value) == true ){
+			  			ApplyFilterTable(10,false,value);
+			  		}
+			  		
 			  	});
 			  	
 			  	return false;
@@ -370,11 +425,11 @@
 			  	
 			  	
 			  	var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+			  	var rows = table.rows;
+			  	var rows = table.rows;
+			  	countRows=rows.length;
 			  	if(alphabet == true)
 			  	{
-			  		
-			  		var rows = table.rows;
-			  		countRows=rows.length
 			  		for (let i = 0; i < countRows ; i++) {
 			  			var textcell = rows[i].getElementsByTagName("TD")[column].innerText;
 			  			let minLen=Math.min(value.length,textcell.length);
@@ -390,7 +445,33 @@
 			  	}
 			  	else
 			  	{
-			  	
+			  	   	for (let i = 0; i < countRows ; i++) {
+			  			var textcell = rows[i].getElementsByTagName("TD")[column].innerText;
+			  			
+			  			var NumInTable;
+			  			if(column == 2 || column == 3 || column == 4)
+			  			{
+			  				NumInTable=textcell.split(' ')[0];
+			  			}
+			  			else if( column == 9 || column == 10)
+			  			{
+			  			        NumInTable=textcell.split('%')[0];
+			  			}
+			  			else
+			  			{
+			  				NumInTable=textcell;
+			  			}
+			  			console.log(value);
+			  			console.log(NumInTable);
+			  			if( parseFloat(value) > parseFloat(NumInTable) ){
+			  				table.deleteRow(i);
+			  				console.log("vlixa");
+			  				i--;
+			  				countRows--;
+			  			}
+			  			
+			  			if(rows.length == 0)break;
+			  		}
 			  	}
 			      
 			  }
@@ -403,16 +484,55 @@
 			  	}
 			  	return true;
 			  }
-			
+			  function isNumber(value)
+			  {	
+			  	return !isNaN(value);
+			  }
+			  
+			  function ApplyTheRestFilters(without)
+			  {
+			  	for( let i=0; i<11 ; i++)
+			  	{
+			  		if( i != without)
+			  		{
+			  			let value = document.getElementsByClassName("form-control")[i].value;
+			  			
+			  			if( i == 0 || i == 1 || i == 8 )
+			  			{
+			  				if( value.length > 0)ApplyFilterTable(i,true,value.toLowerCase())
+			  			}
+			  			else
+			  			{
+			  				if( value.length > 0 && isNumber(value) == true )ApplyFilterTable(i,false,value);
+			  			}
+			  		}
+			  		
+			  	}
+			  }
+			  function ClearAllInputs(){
+			  
+			  	for(var i=0;i<11;i++)
+			  	{
+			  		console.log("clear");
+			  		document.getElementsByClassName("form-control")[i].value = "";
+			  	}
+			  }
+			  function hideAllArrows(){
+				for(var i=0 ; i<11 ;i++)
+				{
+					document.getElementById('myTable').getElementsByTagName('span')[2*i+1].style.visibility="hidden";
+				  	document.getElementById('myTable').getElementsByTagName('span')[2*i].style.visibility="hidden";
+				}			  
+			  }
 
 		</script>
 	</head>
 	
 	<body onload = "get_data_from_database('onlyget')">
 		<main id="main">
-		     <form onsubmit="return wizard_func()" class="btnform">
+		     <!--form onsubmit="return wizard_func()" class="btnform">
 			<button type="submit" class="btn" id="wizard" name="wizard_btn" >Find service</button>
-		     </form>
+		     </form-->
 		     <form onsubmit="return export_func()" class="btnform">
 			<button type="submit" class="btn" id="export" name="export_btn">Export</button>
 		     </form>
@@ -426,17 +546,61 @@
 			<table class="table" id="myTable">
 				<thead class="table_head">
 					<tr>
-						<th class="table_head" onclick="sortTable(0)" >Name</th>
-						<th class="table_head"onclick="sortTable(1)" >API Name</th>
-						<th class="table_head" onclick="sortTable(2)">Memory</th>
-						<th class="table_head" onclick="sortTable(3)">vCPUs</th>
-						<th class="table_head" onclick="sortTable(4)">Storage</th>
-						<th class="table_head" onclick="sortTable(5)">Today price</th>
-						<th class="table_head" onclick="sortTable(6)">Month ago price</th>
-						<th class="table_head" onclick="sortTable(7)">Year ago price</th>
-						<th class="table_head" onclick="sortTable(8)">Region</th>
-						<th class="table_head" onclick="sortTable(9)">Percentage Change Month</th>
-						<th class="table_head" onclick="sortTable(10)">Percentage Change Year</th>
+						<th class="table_head" onclick="sortTable(0)" >
+							Name
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head"onclick="sortTable(1)" >
+							API Name
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(2)">
+							Memory
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(3)">
+							vCPUs
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(4)">
+							Storage
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(5)">
+							Today price
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(6)">
+							Month ago price
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(7)">
+							Year ago price
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(8)">
+							Region
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(9)">
+							Percentage Change Month
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
+						<th class="table_head" onclick="sortTable(10)">
+							Percentage Change Year
+							<span>&uarr;</span>
+							<span>&darr;</span>
+						</th>
 
 					</tr>
 					<tr>
@@ -449,8 +613,8 @@
 						<th> <input type="text" class="form-control" placeholder="Min Mprice: 0"> </th>
 						<th> <input type="text" class="form-control" placeholder="Min Yprice: 0"> </th>
 						<th> <input type="text" class="form-control" placeholder="Filter..."> </th>
-						<th> <input type="text" class="form-control" placeholder="Percentage Month:"> </th>
-						<th> <input type="text" class="form-control" placeholder="Percentage Year:"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Percentage Month:"> </th>
+						<th> <input type="text" class="form-control" placeholder="Min Percentage Year:"> </th>
 					</tr>
 				</thead>
 				<tbody class="table_body">
