@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.phptutorial.net/app/css/style.css">
+    <style>
+        body {
+            background-color: #FAEBD7;
+            font-family: Georgia, Serif, serif;
+        }
+        .error {
+            font-size:15px;
+            color: red;
+        }
+    </style>
+    <title>Login</title>
+    <script>
+        function login() {
+            var data =  new FormData;
+
+            document.getElementById("login_form").style.visibility;
+
+            data.append("login", "login_form");
+            data.append("email", document.getElementById("email").value);
+            data.append("password", document.getElementById("password").value);
+
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "./php/login.php")
+
+            xhr.onload = function(){
+                console.log(this.response);
+                var result = xhr.responseText;
+                if(result.toString() === "Login successful!") {
+
+                    window.location.href = 'http://localhost/Project/index.html';
+                }
+                else{
+                    document.getElementById("wrong_email").innerHTML = "Wrong email or password";
+                    document.getElementById("wrong_password").innerHTML = "Wrong email or password";
+                }
+            };
+
+            xhr.send(data);
+
+            return false;
+        }
+    </script>
+</head>
+<body>
+<main>
+    <h1 class="website-title">Cloud Service Analyzer</h1>
+
+    <form onsubmit="return login()" method="post" id = "login_form">
+        <h1>Sign In</h1>
+        <div>
+            <label for="email">Email:</label>
+            <h1 class="error" id="wrong_email"></h1>
+            <input type="email" name="email" id="email">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <h1 class="error" id="wrong_password"></h1>
+            <input type="password" name="password" id="password">
+        </div>
+        <button type="submit">Login</button>
+        <footer>No registration? <a href="register.html">Register here</a></footer>
+    </form>
+</main>
+</body>
+</html>

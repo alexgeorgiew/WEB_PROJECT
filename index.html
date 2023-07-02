@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="css/index.css">
-		<title>Cloud Services Analyzator</title>
+		<title>Cloud Services Analyzer</title>
 		<script>
 			let isSetListen=false;
 			let global_rowsLen = 0;
@@ -27,7 +27,7 @@
 			}
 			function wizard_func(){
 				var vi=document.getElementById("wizard_form").style.visibility;
-				if(vi == "visible")
+				if(vi === "visible")
 				{
 					document.getElementById("wizard_form").style.visibility = "hidden";
 				}
@@ -43,8 +43,8 @@
 
 			var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
 			let $text="";
-			for (var i = 0, row; row = table.rows[i]; i++) {
-			   for (var j = 0, col; col = row.cells[j]; j++) {
+			for (var i = 0, row; row == table.rows[i]; i++) {
+			   for (var j = 0, col; col == row.cells[j]; j++) {
 			     	$text+=col.innerText;
 			     	if( j < row.cells.length -1 )$text+=",";
 			   }
@@ -77,18 +77,18 @@
 				var data = new FormData();
 				
 				document.getElementById("import").disabled= true;
-				if($action == "wizard")data.append("wizard",document.getElementById("wizard").name);
+				if($action === "wizard")data.append("wizard",document.getElementById("wizard").name);
 				else data.append("wizard","notactive");
 				
-				if($action == "import"){
+				if($action === "import"){
 					ClearAllInputs();
 					data.append("import",document.getElementById("import").name);
 				}
 				else data.append("import","notactive");
 				
-				if($action == "onlyget")
+				if($action === "onlyget")
 				{
-					if(isSetListen == false){
+					if(isSetListen === false){
 						setListeners();
 						isSetListen = true;
 					}	     
@@ -204,7 +204,7 @@
 			
 			function sortTable(n) {
 				  var alphabet_sort = false;
-				  if(n == 0 || n == 1 || n == 8 )alphabet_sort = true;
+				  if(n === 0 || n === 1 || n === 8 )alphabet_sort = true;
 				  
 				  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
 				  table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
@@ -232,11 +232,11 @@
 						      y = rows[i + 1].getElementsByTagName("TD")[n].innerText;
 						      
 						      /*Get only the number from the specified column*/
-						      if(n == 2 || n == 3 || n == 4 || n == 9 || n == 10)
+						      if(n === 2 || n === 3 || n === 4 || n === 9 || n === 10)
 						      {
 						      	let symbol = " ";
 						      	
-						      	if(n == 9 || n == 10)symbol="%";
+						      	if(n === 9 || n === 10)symbol="%";
 						      	
 						      	let text_x = x;
 						      	let text_y = y;
@@ -250,26 +250,26 @@
 						      
 						      /* Check if the two rows should switch place,
 						      based on the direction, asc or desc: */
-						      if (dir == "asc") {
+						      if (dir === "asc") {
 						      	
-							if (String(x).toLowerCase() > String(y).toLowerCase() && alphabet_sort == true) {
+							if (String(x).toLowerCase() > String(y).toLowerCase() && alphabet_sort === true) {
 							  // If so, mark as a switch and break the loop:
 							  shouldSwitch = true;
 							  break;
 							}
-							if (Number(x) > Number(y) && alphabet_sort == false) {
+							if (Number(x) > Number(y) && alphabet_sort === false) {
 							  shouldSwitch = true;
 							  break;
 							}
 							
-						      } else if (dir == "desc") {
+						      } else if (dir === "desc") {
 						      
-							if (String(x).toLowerCase() < String(y).toLowerCase() && alphabet_sort == true) {
+							if (String(x).toLowerCase() < String(y).toLowerCase() && alphabet_sort === true) {
 							  // If so, mark as a switch and break the loop:
 							  shouldSwitch = true;
 							  break;
 							}
-							if (Number(x) < Number(y) && alphabet_sort == false) {
+							if (Number(x) < Number(y) && alphabet_sort === false) {
 							  shouldSwitch = true;
 							  break;
 							}
@@ -288,7 +288,7 @@
 						    else {
 						      /* If no switching has been done AND the direction is "asc",
 						      set the direction to "desc" and run the while loop again. */
-						      if (switchcount == 0 && dir == "asc") {
+						      if (switchcount === 0 && dir === "asc") {
 								dir = "desc";
 								document.getElementById('myTable').getElementsByTagName('span')[2*n+1].style.visibility="visible";
 				  				document.getElementById('myTable').getElementsByTagName('span')[2*n].style.visibility="hidden";
@@ -449,11 +449,11 @@
 			  			var textcell = rows[i].getElementsByTagName("TD")[column].innerText;
 			  			
 			  			var NumInTable;
-			  			if(column == 2 || column == 3 || column == 4)
+			  			if(column === 2 || column === 3 || column === 4)
 			  			{
 			  				NumInTable=textcell.split(' ')[0];
 			  			}
-			  			else if( column == 9 || column == 10)
+			  			else if( column === 9 || column === 10)
 			  			{
 			  			        NumInTable=textcell.split('%')[0];
 			  			}
@@ -470,7 +470,7 @@
 			  				countRows--;
 			  			}
 			  			
-			  			if(rows.length == 0)break;
+			  			if(rows.length === 0)break;
 			  		}
 			  	}
 			      
@@ -480,7 +480,7 @@
 			  {
 			  	for( let i=0 ; i<n ; i++)
 			  	{
-			  		if(str1.charAt(i) != str2.charAt(i) )return false;
+			  		if(str1.charAt(i) !== str2.charAt(i) )return false;
 			  	}
 			  	return true;
 			  }
@@ -493,17 +493,17 @@
 			  {
 			  	for( let i=0; i<11 ; i++)
 			  	{
-			  		if( i != without)
+			  		if( i !== without)
 			  		{
 			  			let value = document.getElementsByClassName("form-control")[i].value;
 			  			
-			  			if( i == 0 || i == 1 || i == 8 )
+			  			if( i === 0 || i === 1 || i === 8 )
 			  			{
 			  				if( value.length > 0)ApplyFilterTable(i,true,value.toLowerCase())
 			  			}
 			  			else
 			  			{
-			  				if( value.length > 0 && isNumber(value) == true )ApplyFilterTable(i,false,value);
+			  				if( value.length > 0 && isNumber(value) === true )ApplyFilterTable(i,false,value);
 			  			}
 			  		}
 			  		
@@ -530,6 +530,7 @@
 	
 	<body onload = "get_data_from_database('onlyget')">
 		<main id="main">
+			<h1 class="website-title">Cloud Service Analyzer</h1>
 		     <!--form onsubmit="return wizard_func()" class="btnform">
 			<button type="submit" class="btn" id="wizard" name="wizard_btn" >Find service</button>
 		     </form-->
@@ -551,7 +552,7 @@
 							<span>&uarr;</span>
 							<span>&darr;</span>
 						</th>
-						<th class="table_head"onclick="sortTable(1)" >
+						<th class="table_head" onclick="sortTable(1)" >
 							API Name
 							<span>&uarr;</span>
 							<span>&darr;</span>
@@ -627,8 +628,8 @@
 						<option value="Paris">Europe (Paris)</option> 
 						<option value="Ireland">Europe (Ireland)</option> 
 						<option value="Tokyo">Asia-Pacific (Tokyo)</option> 
-				</select></br>
-				
+				</select>
+
 				<input type="number" class="input_wizard" id="min_price_per_day" placeholder="Min price per day">Min price per day</br>
 				
 				<input type="number" class="input_wizard" id="max_price_per_day" placeholder="Max price per day">Max price per day</br>
@@ -639,14 +640,11 @@
 				
 				<button type="submit" class="wizard_form_btn" id="wizard_find" name="Find">Find</button>
 			</form>
-			
+
+			<hr>
 			<h1>NEWS:</h1>
 			<hr>
-			
-			
-			<div id="news">
-				<p>sadad</p>
-			</div>
+			<div class = "floating-text" id = "news"></div>
 		</main>
 	</body>
 </html>

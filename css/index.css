@@ -28,6 +28,43 @@ td{
 	border: 1px solid black;
 }
 
+body {
+	background-color: #FAEBD7;
+	font-family: Georgia, Serif, serif;
+}
+
+@keyframes float {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(-180%);
+	}
+}
+
+/* Apply the animation to the text */
+.floating-text {
+	font-size: 50px;
+	animation: float 10s linear infinite;
+	white-space: nowrap;
+
+}
+.website-title {
+	font-size: 24px;
+	color: #333;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+}
+.pop-up {
+	opacity: 0;
+	transform: scale(0.5);
+	transition: opacity 0.5s, transform 0.5s;
+}
+.pop-up:hover {
+	opacity: 1;
+	transform: scale(1);
+}
 
 .wizard_form {
 	visibility: hidden;
